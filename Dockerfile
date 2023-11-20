@@ -1,37 +1,20 @@
-# FROM nodemon:3
-
-# # Create app directory
-# WORKDIR /app
-
-# # Install app dependencies
-# COPY ./package.json /server
-# COPY ./package-lock.json /server
-
-# RUN nodemon server/server
-# # If you are building your code for production
-# # RUN npm ci --only=production
-
-# # Bundle app source
-# COPY . /backend
-
-# EXPOSE 5002
-# Use an official Node.js runtime as a base image
-FROM node:14
+FROM node:21
 
 # Create app directory
 WORKDIR /app
-
-# Install nodemon globally
 RUN npm install -g nodemon
-
 # Install app dependencies
-COPY package.json package-lock.json /server/
-RUN cd /server && npm install
+COPY ./package.json /app
+COPY ./package-lock.json /app
+
+RUN npm ci
+# If you are building your code for production
+# RUN npm ci --only=production
 
 # Bundle app source
-COPY . /backend
-
+COPY . /app
 EXPOSE 5002
+
 
 # Run nodemon to start your server
 CMD ["nodemon", "server"]
